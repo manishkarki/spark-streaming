@@ -7,7 +7,7 @@ import org.apache.spark.sql.SparkSession
   */
 object Playground extends App {
   val spark = SparkSession.builder()
-    .appName("plaground")
+    .appName("playground")
     .config("spark.master", "local")
     .getOrCreate()
 
