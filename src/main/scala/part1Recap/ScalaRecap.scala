@@ -57,6 +57,13 @@ object ScalaRecap extends App {
 
   aFuture.onComplete {
     case Success(value) => println(s"I've found $value")
-    case Failure(ex) => println(s" I've failed : $ex")
+    case Failure(ex)    => println(s" I've failed : $ex")
+  }
+
+  // Partial Functions
+  val aPartialFunction: PartialFunction[Int, Int] = {
+    case 1 => 43
+    case 8 => 56
+    case _ => 999
   }
 }
