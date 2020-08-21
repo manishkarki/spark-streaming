@@ -37,4 +37,11 @@ object ScalaRecap extends App {
 
   // map, flatMap, filter
   val processedList = List(1, 2, 3).map(incrementer)
+
+  // pattern-matching
+  val unknown = 45
+  val ordinal = unknown match {
+    case 1 => "one"
+    case _ => "everything else"
+  }
 }
