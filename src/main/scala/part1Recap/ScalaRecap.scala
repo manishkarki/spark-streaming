@@ -3,7 +3,7 @@ package part1Recap
 /**
   * @author mkarki
   */
-object ScalaRecap {
+object ScalaRecap extends App {
 
   // values and variables
   val aBoolean: Boolean = false;
@@ -30,4 +30,12 @@ object ScalaRecap {
   object MySingleton
   //companions
   object Carnivore
+
+  // Functional programming
+  val incrementer: Int => Int = x => x + 1
+  val incremented = incrementer(42)
+
+  // map, flatMap, filter
+  val processedList = List(1, 2, 3).map(incrementer)
+  println(processedList)
 }
