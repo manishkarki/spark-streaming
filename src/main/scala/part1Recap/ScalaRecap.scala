@@ -25,4 +25,9 @@ object ScalaRecap {
     override def eat(animal: Animal): Unit =
       println("Crunch!!")
   }
+
+  //singleton pattern
+  object MySingleton
+  //companions
+  object Carnivore
 }
