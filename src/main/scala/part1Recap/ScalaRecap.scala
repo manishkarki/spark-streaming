@@ -66,4 +66,18 @@ object ScalaRecap extends App {
     case 8 => 56
     case _ => 999
   }
+
+  // implicits
+
+  // auto injection by compiler
+  def methodWithImplicitArg(implicit x: Int) = x + 43
+  implicit val something = 67
+  println(methodWithImplicitArg)
+
+  case class Person(name: String) {
+    def greet = println(s"Hi, my name is $name")
+  }
+  implicit def fromStringToPerson(name: String) = Person(name)
+
+  "Hanuman".greet
 }
