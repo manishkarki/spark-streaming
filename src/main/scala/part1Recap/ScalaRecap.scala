@@ -1,5 +1,8 @@
 package part1Recap
 
+import scala.concurrent.Future
+import scala.util.{Failure, Success}
+
 /**
   * @author mkarki
   */
@@ -43,5 +46,17 @@ object ScalaRecap extends App {
   val ordinal = unknown match {
     case 1 => "one"
     case _ => "everything else"
+  }
+
+  // Future
+  import scala.concurrent.ExecutionContext.Implicits.global
+  val aFuture = Future {
+    // some expensive computations, runs on another thread
+    42
+  }
+
+  aFuture.onComplete {
+    case Success(value) => println(s"I've found $value")
+    case Failure(ex) => println(s" I've failed : $ex")
   }
 }
