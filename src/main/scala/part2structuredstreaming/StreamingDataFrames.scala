@@ -13,12 +13,14 @@ object StreamingDataFrames extends App {
     .getOrCreate
 
   def readFromSocket() = {
+    // reading a DF
     val lines: DataFrame = spark.readStream
       .format("socket")
       .option("host", "localhost")
       .option("port", 12345)
       .load()
 
+    //consuming a DF
     val query = lines.writeStream
       .format("console")
       .outputMode(OutputMode.Append())
