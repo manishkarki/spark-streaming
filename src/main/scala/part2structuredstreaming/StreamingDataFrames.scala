@@ -16,7 +16,7 @@ object StreamingDataFrames extends App {
     val lines: DataFrame = spark.readStream
       .format("socket")
       .option("host", "localhost")
-      .option("post", 12345)
+      .option("port", 12345)
       .load()
 
     val query = lines.writeStream
@@ -26,4 +26,6 @@ object StreamingDataFrames extends App {
 
     query.awaitTermination()
   }
+
+  readFromSocket()
 }
