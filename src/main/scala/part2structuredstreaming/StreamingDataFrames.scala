@@ -25,6 +25,8 @@ object StreamingDataFrames extends App {
     val shortLines = lines
       .filter(length(col("value")) <= 5)
 
+    // check if DF is streaming or not
+    println(shortLines.isStreaming)
     //consuming a DF
     val query = lines.writeStream
       .format("console")
