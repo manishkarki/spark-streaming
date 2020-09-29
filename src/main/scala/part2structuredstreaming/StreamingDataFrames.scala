@@ -5,7 +5,6 @@ import org.apache.spark.sql.functions.{col, length}
 import org.apache.spark.sql.streaming.{OutputMode, Trigger}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
-import scala.concurrent._
 import scala.concurrent.duration.DurationInt
 
 /**
