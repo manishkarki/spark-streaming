@@ -26,6 +26,7 @@ object StreamingDataFrames extends App {
       .outputMode(OutputMode.Append())
       .start()
 
+    //wait for the stream to finish
     query.awaitTermination()
   }
 
