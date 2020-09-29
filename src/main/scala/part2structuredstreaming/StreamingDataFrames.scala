@@ -2,8 +2,11 @@ package part2structuredstreaming
 
 import common.stocksSchema
 import org.apache.spark.sql.functions.{col, length}
-import org.apache.spark.sql.streaming.OutputMode
+import org.apache.spark.sql.streaming.{OutputMode, Trigger}
 import org.apache.spark.sql.{DataFrame, SparkSession}
+
+import scala.concurrent._
+import scala.concurrent.duration.DurationInt
 
 /**
   * @author mkarki
@@ -49,6 +52,22 @@ object StreamingDataFrames extends App {
     stocksDF.writeStream
       .format("console")
       .outputMode("append") // default outputMode
+      .start()
+      .awaitTermination()
+  }
+
+  def demoTriggers() = {
+    val lines: DataFrame = spark.readStream
+      .format("socket")
+      .option("host", "localhost")
+      .option("port", 12345)
+      .load()
+
+    // write the lines at certain trigger
+    lines.writeStream
+      .format("console")
+      .outputMode("append")
+      .trigger(Trigger.ProcessingTime(2.seconds)) // every 2 seconds run the query
       .start()
       .awaitTermination()
   }
