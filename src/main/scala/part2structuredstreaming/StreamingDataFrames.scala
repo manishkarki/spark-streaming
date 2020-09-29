@@ -1,5 +1,6 @@
 package part2structuredstreaming
 
+import org.apache.spark.sql.functions.{col, length}
 import org.apache.spark.sql.streaming.OutputMode
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
@@ -19,6 +20,10 @@ object StreamingDataFrames extends App {
       .option("host", "localhost")
       .option("port", 12345)
       .load()
+
+    // transformation
+    val shortLines = lines
+      .filter(length(col("value")) <= 5)
 
     //consuming a DF
     val query = lines.writeStream
