@@ -1,5 +1,6 @@
 package part2structuredstreaming
 
+import common.stocksSchema
 import org.apache.spark.sql.functions.{col, length}
 import org.apache.spark.sql.streaming.OutputMode
 import org.apache.spark.sql.{DataFrame, SparkSession}
@@ -37,5 +38,21 @@ object StreamingDataFrames extends App {
     query.awaitTermination()
   }
 
+  def readFromFiles() = {
+    val stocksDF: DataFrame = spark.readStream
+      .format("csv")
+      .option("header", "false")
+      .option("dateFormat", "MMM d yyyy")
+      .schema(stocksSchema)
+      .load("src/main/resources/data/stocks")
+
+    stocksDF.writeStream
+      .format("console")
+      .outputMode("append") // default outputMode
+      .start()
+      .awaitTermination()
+  }
+
   readFromSocket()
+  readFromFiles()
 }
