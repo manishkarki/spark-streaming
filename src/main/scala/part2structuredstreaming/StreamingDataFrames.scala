@@ -53,6 +53,6 @@ object StreamingDataFrames extends App {
       .awaitTermination()
   }
 
-  readFromSocket()
+//  readFromSocket()
   readFromFiles()
 }
