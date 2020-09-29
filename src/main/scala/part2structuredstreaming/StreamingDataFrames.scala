@@ -73,5 +73,6 @@ object StreamingDataFrames extends App {
   }
 
 //  readFromSocket()
-  readFromFiles()
+//  readFromFiles()
+  demoTriggers()
 }
