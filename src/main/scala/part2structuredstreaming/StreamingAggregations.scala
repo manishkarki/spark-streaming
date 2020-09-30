@@ -1,7 +1,7 @@
 package part2structuredstreaming
 
 import org.apache.spark.sql.{Column, SparkSession, functions}
-import org.apache.spark.sql.functions.{col, stddev}
+import org.apache.spark.sql.functions.{col, stddev, sum}
 
 /**
   * @author mkarki
@@ -65,5 +65,5 @@ object StreamingAggregations extends App {
   }
 
 //  streamingCount
-  numericalAggregationsWithParam(stddev)
+  numericalAggregationsWithParam(sum)
 }
