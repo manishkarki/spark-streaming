@@ -75,5 +75,17 @@ object StreamingDatasets extends App {
 
   }
 
-  averageHP()
+  // 3)
+  def countCarsByOrigin() = {
+    val carsDS = readCars()
+    carsDS.groupBy(col("Origin"))
+      .count()
+      .writeStream
+      .format("console")
+      .outputMode("complete")
+      .start()
+      .awaitTermination()
+  }
+
+  countCarsByOrigin()
 }
