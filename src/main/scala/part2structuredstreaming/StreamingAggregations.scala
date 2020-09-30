@@ -20,6 +20,8 @@ object StreamingAggregations extends App {
 
     val lineCount = lines.selectExpr("count(*) as lineCount")
 
+    //aggregates with distinct are not supported
+    //otherwise spark will need to keep track of everything
     lineCount.writeStream
       .format("console")
       .outputMode("complete") // append and update not supported on aggregations without watermark
