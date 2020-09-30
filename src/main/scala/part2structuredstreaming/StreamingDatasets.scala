@@ -31,9 +31,6 @@ object StreamingDatasets extends App {
   def showCarNames() = {
     val carsDS = readCars()
 
-    // transformations
-    val carNames = carsDS.select(col("Name"))
-
     // collection transformation
     val carNamesAlt = carsDS.map(_.Name)
 
@@ -52,5 +49,19 @@ object StreamingDatasets extends App {
       3) count the cars by their origin
    */
 
-  showCarNames()
+  // 1)
+  def processPowerfulCars() = {
+    val carsDS = readCars()
+    val powerfulCars = carsDS.select(col("Name"), col("HorsePower"))
+      .filter(col("HorsePower") > 140)
+
+
+    powerfulCars.writeStream
+      .format("console")
+      .outputMode("append")
+      .start()
+      .awaitTermination()
+  }
+
+  processPowerfulCars()
 }
