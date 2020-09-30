@@ -77,7 +77,11 @@ object StreamingJoins extends App {
 
     // join stream with stream
     val streamedJoinsDF = streamedBandsDF.join(streamedGuitaristssDF, streamedGuitaristssDF.col("band") === streamedBandsDF.col("id"))
-
+    /*
+      - inner joins are supported
+      - left/right outer joins ARE supported, but must have watermarks
+      - full outer joins are not supported
+    */
     streamedJoinsDF.writeStream
       .format("console")
       .outputMode("append") // only append supported for stream v stream join
