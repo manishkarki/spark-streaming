@@ -23,5 +23,7 @@ object StreamingAggregations extends App {
     lineCount.writeStream
       .format("console")
       .outputMode("complete") // append and update not supported on aggregations without watermark
+      .start()
+      .awaitTermination()
   }
 }
