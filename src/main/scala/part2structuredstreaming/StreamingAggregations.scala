@@ -48,4 +48,5 @@ object StreamingAggregations extends App {
   }
 
   streamingCount
+  numericalAggregations()
 }
