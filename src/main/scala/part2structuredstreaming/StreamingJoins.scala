@@ -55,6 +55,36 @@ object StreamingJoins extends App {
       .awaitTermination()
   }
 
-  joinStreamWithStatic()
+//  joinStreamWithStatic()
+
+  // since spark 2.3 stream v stream joins
+  def joinStreamWithStream() = {
+    val streamedBandsDF = spark.readStream
+      .format("socket")
+      .option("host", "localhost")
+      .option("port", 12345)
+      .load // this contains a single column "value" of type String
+      .select(from_json(col("value"), bandsSchema).as("band"))
+      .selectExpr("band.id as id", "band.name as name", "band.hometown as hometown", "band.year as year")
+
+    val streamedGuitaristssDF = spark.readStream
+      .format("socket")
+      .option("host", "localhost")
+      .option("port", 12346)
+      .load // this contains a single column "value" of type String
+      .select(from_json(col("value"), guitarPlayers.schema).as("guitarPlayer"))
+      .selectExpr("guitarPlayer.id as id", "guitarPlayer.name as name", "guitarPlayer.guitars as guitars", "guitarPlayer.band as band")
+
+    // join stream with stream
+    val streamedJoinsDF = streamedBandsDF.join(streamedGuitaristssDF, streamedGuitaristssDF.col("band") === streamedBandsDF.col("id"))
+
+    streamedJoinsDF.writeStream
+      .format("console")
+      .outputMode("append") // only append supported for stream v stream join
+      .start()
+      .awaitTermination()
+  }
+
+  joinStreamWithStream()
 
 }
