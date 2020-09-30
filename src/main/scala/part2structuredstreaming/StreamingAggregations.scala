@@ -31,11 +31,7 @@ object StreamingAggregations extends App {
   }
 
   def numericalAggregations() = {
-    val lines = spark.readStream
-      .format("socket")
-      .option("host", "localhost")
-      .option("port", 12345)
-      .load()
+    val lines = getLines()
     val numbers = lines.select(col("value").cast("integer").as("numValue"))
     val sumDF = numbers.select(functions.sum(col("numValue")))
       .as("agg_so_far")
@@ -48,11 +44,7 @@ object StreamingAggregations extends App {
   }
 
   def numericalAggregationsWithParam(aggFunction: Column => Column) = {
-    val lines = spark.readStream
-      .format("socket")
-      .option("host", "localhost")
-      .option("port", 12345)
-      .load()
+    val lines = getLines()
     val numbers = lines.select(col("value").cast("integer").as("numValue"))
     val sumDF = numbers.select(aggFunction(col("numValue")))
       .as("agg_so_far")
@@ -62,6 +54,14 @@ object StreamingAggregations extends App {
       .outputMode("complete")
       .start()
       .awaitTermination()
+  }
+
+  def getLines() = {
+    spark.readStream
+      .format("socket")
+      .option("host", "localhost")
+      .option("port", 12345)
+      .load()
   }
 
 //  streamingCount
