@@ -27,4 +27,22 @@ object StreamingDatasets extends App {
     // or can be passed implicitly by creating a custom one as Encoders.product[Car]
 
   }
+
+  def showCarNames() = {
+    val carsDS = readCars()
+
+    // transformations
+    val carNames = carsDS.select(col("Name"))
+
+    // collection transformation
+    val carNamesAlt = carsDS.map(_.Name)
+
+    carNamesAlt.writeStream
+      .format("console")
+      .outputMode("append")
+      .start()
+      .awaitTermination()
+  }
+
+  showCarNames()
 }
