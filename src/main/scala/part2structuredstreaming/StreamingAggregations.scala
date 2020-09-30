@@ -64,6 +64,22 @@ object StreamingAggregations extends App {
       .load()
   }
 
+  // counting the occurrences of name
+  def groupNames() = {
+    val lines = getLines()
+
+    val names = lines.select(col("value"))
+      .groupBy(col("value"))
+      .count()
+
+    names.writeStream
+      .format("console")
+      .outputMode("complete")
+      .start()
+      .awaitTermination()
+  }
+
 //  streamingCount
-  numericalAggregationsWithParam(sum)
+//  numericalAggregationsWithParam(sum)
+  groupNames()
 }
