@@ -44,5 +44,13 @@ object StreamingDatasets extends App {
       .awaitTermination()
   }
 
+  /*
+      Exercises:
+      1) how many powerful cars we have in the dataset(hp > 140)
+      2) AVERAGE HP for the entire DS
+        (USE the complete output mode)
+      3) count the cars by their origin
+   */
+
   showCarNames()
 }
