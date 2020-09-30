@@ -43,6 +43,11 @@ object StreamingJoins extends App {
     val streamedBandsGuitaristsDF = streamedBandsDF.join(guitarPlayers,
       guitarPlayers.col("band") === streamedBandsDF.col("id"))
 
+    /*
+      restricted joins
+      - stream joining with static: RIGHT outer join/full outer join/ right_semi not permitted
+      - static joining with stream: LEFT outer join/full outer join/ left_semi not permitted
+     */
     streamedBandsGuitaristsDF.writeStream
       .format("console")
       .outputMode("append")
