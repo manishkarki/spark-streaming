@@ -47,6 +47,6 @@ object StreamingAggregations extends App {
       .awaitTermination()
   }
 
-  streamingCount
+//  streamingCount
   numericalAggregations()
 }
