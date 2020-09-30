@@ -78,6 +78,10 @@ object StreamingDatasets extends App {
   // 3)
   def countCarsByOrigin() = {
     val carsDS = readCars()
+
+    // alternatively to preserve the DS
+    val carCountByOriginAlt = carsDS.groupByKey(car => car.Origin)
+      .count()
     carsDS.groupBy(col("Origin"))
       .count()
       .writeStream
