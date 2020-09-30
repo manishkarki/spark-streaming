@@ -1,7 +1,7 @@
 package part2structuredstreaming
 
-import org.apache.spark.sql.{SparkSession, functions}
-import org.apache.spark.sql.functions.col
+import org.apache.spark.sql.{Column, SparkSession, functions}
+import org.apache.spark.sql.functions.{col, stddev}
 
 /**
   * @author mkarki
@@ -47,6 +47,23 @@ object StreamingAggregations extends App {
       .awaitTermination()
   }
 
+  def numericalAggregationsWithParam(aggFunction: Column => Column) = {
+    val lines = spark.readStream
+      .format("socket")
+      .option("host", "localhost")
+      .option("port", 12345)
+      .load()
+    val numbers = lines.select(col("value").cast("integer").as("numValue"))
+    val sumDF = numbers.select(aggFunction(col("numValue")))
+      .as("agg_so_far")
+
+    sumDF.writeStream
+      .format("console")
+      .outputMode("complete")
+      .start()
+      .awaitTermination()
+  }
+
 //  streamingCount
-  numericalAggregations()
+  numericalAggregationsWithParam(stddev)
 }
