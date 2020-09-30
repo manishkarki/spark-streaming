@@ -2,7 +2,7 @@ package part2structuredstreaming
 
 import common.{Car, carsSchema}
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.functions.{col, from_json}
+import org.apache.spark.sql.functions.{avg, col, from_json}
 
 /**
   * @author mkarki
@@ -63,5 +63,17 @@ object StreamingDatasets extends App {
       .awaitTermination()
   }
 
-  processPowerfulCars()
+  // 2)
+  def averageHP() = {
+    val carsDS = readCars()
+    carsDS.select(avg(col("HorsePower")).as("avg_horse_power"))
+      .writeStream
+      .format("console")
+      .outputMode("complete")
+      .start()
+      .awaitTermination()
+
+  }
+
+  averageHP()
 }
