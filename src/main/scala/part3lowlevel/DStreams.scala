@@ -8,7 +8,8 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
   * @author mkarki
   */
 object DStreams {
-  val spark = SparkSession.builder()
+  val spark = SparkSession
+    .builder()
     .appName("DStreams")
     .master("local[2]")
     .getOrCreate()
@@ -34,7 +35,8 @@ object DStreams {
     val socketStream: DStream[String] = ssc.socketTextStream("localhost", 12345)
 
     // transformation = lazy
-    val wordsStream: DStream[String] = socketStream.flatMap(line => line.split(" "))
+    val wordsStream: DStream[String] =
+      socketStream.flatMap(line => line.split(" "))
 
     // action
     wordsStream.print()
@@ -44,7 +46,7 @@ object DStreams {
   }
 
   def main(args: Array[String]): Unit = {
-
+    readFromSocket()
   }
 
 }
