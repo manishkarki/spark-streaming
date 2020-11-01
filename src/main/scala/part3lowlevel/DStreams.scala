@@ -23,6 +23,7 @@ object DStreams {
   /*
     - define input sources by creating DStreams
     - define transformations on DStreams
+    - call an action on DStreams
     - start ALL computations with ssc.start()
       - no more computations can be added
     - await termination or stop the computation
