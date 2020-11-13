@@ -1,5 +1,9 @@
 package part3lowlevel
 
+import java.sql.Date
+import java.text.SimpleDateFormat
+
+import common.Stock
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.streaming.dstream.DStream
 import org.apache.spark.streaming.{Seconds, StreamingContext}
@@ -45,8 +49,29 @@ object DStreams {
     ssc.awaitTermination()
   }
 
+  def readFromFile() = {
+    val stocksFilePath = "src/main/resources/data/stocks"
+    val textStream: DStream[String] = ssc.textFileStream(stocksFilePath)
+
+    val dateFormat = new SimpleDateFormat("MMM d yyyy")
+    // transformations
+    val stockStream: DStream[Stock] = textStream.map(line => {
+      val tokens = line.split(",")
+      val company = tokens(0)
+      val date = new Date(dateFormat.parse(tokens(1)).getTime)
+      val price = tokens(1).toDouble
+
+      Stock(company, date, price)
+
+    })
+
+    // action
+    stockStream.print()
+  }
+
   def main(args: Array[String]): Unit = {
-    readFromSocket()
+//    readFromSocket()
+    readFromFile()
   }
 
 }
