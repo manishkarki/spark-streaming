@@ -1,6 +1,7 @@
 package part4integrations
 
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.functions.{col, expr}
 
 /**
   * @author mkarki
@@ -19,7 +20,8 @@ object KafkaIntegration {
       .option("subscribe", "sparkstreaming")
       .load()
 
-    kafkaDF.writeStream
+    kafkaDF.select(col("topic"), expr("cast(value as string) as actualValue"))
+      .writeStream
       .format("console")
       .outputMode("append")
       .start()
