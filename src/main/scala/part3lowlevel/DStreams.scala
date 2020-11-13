@@ -86,7 +86,7 @@ object DStreams {
           |AAPL,Apr 1 2003,7.11
           |AAPL,May 1 2003,8.98
           |""".stripMargin.trim)
-    })
+    }).start()
   }
 
   def readFromFile() = {
