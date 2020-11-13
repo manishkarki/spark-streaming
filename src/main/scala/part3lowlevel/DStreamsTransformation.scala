@@ -41,7 +41,7 @@ object DStreamsTransformation {
   })
 
   def main(args: Array[String]): Unit = {
-    val stream = readPeople()
+    val stream = peopleAges()
     stream.print()
     ssc.start()
     ssc.awaitTermination()
