@@ -1,6 +1,7 @@
 package part3lowlevel
 
 import java.sql.Date
+import java.time.{LocalDate, Period}
 
 import common.Person
 import org.apache.spark.sql.SparkSession
@@ -32,6 +33,12 @@ object DStreamsTransformation {
         tokens(7).toInt // salary
       )
     })
+
+  // map, flatMap, filter
+  def peopleAges() = readPeople().map(person => {
+    val age = Period.between(person.birthDate.toLocalDate, LocalDate.now()).getYears
+    (s"${person.firstName} ${person.lastName}", age)
+  })
 
   def main(args: Array[String]): Unit = {
     val stream = readPeople()
