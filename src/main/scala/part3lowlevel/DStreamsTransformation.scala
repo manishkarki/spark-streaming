@@ -40,8 +40,14 @@ object DStreamsTransformation {
     (s"${person.firstName} ${person.lastName}", age)
   })
 
+  def peopleSmallNames() = readPeople().flatMap( person => {
+    List(person.firstName, person.lastName)
+  })
+
+  def highIncomePeoples() = readPeople().filter(_.salary > 80000)
+
   def main(args: Array[String]): Unit = {
-    val stream = peopleAges()
+    val stream = highIncomePeoples()
     stream.print()
     ssc.start()
     ssc.awaitTermination()
