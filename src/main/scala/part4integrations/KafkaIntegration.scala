@@ -30,10 +30,6 @@ object KafkaIntegration {
   }
 
   def writeToKafka() = {
-    val carsDF = spark.readStream
-      .schema(carsSchema)
-      .json("src/main/resources/data/cars")
-
     val carsKafkaDF = carsDF.selectExpr("upper(Name) as key", "name as value")
 
     carsKafkaDF.writeStream
@@ -43,6 +39,18 @@ object KafkaIntegration {
       .option("checkpointLocation", "checkpoints")
       .start()
       .awaitTermination()
+  }
+
+  val carsDF = spark.readStream
+    .schema(carsSchema)
+    .json("src/main/resources/data/cars")
+
+  /*
+      Exercise: write the whole cars data structures to the kafka as JSON.
+      USE struct columns and the to_json function.
+   */
+  def writeWholeCarsDSToKafka() = {
+
   }
 
   def main(args: Array[String]): Unit = {
