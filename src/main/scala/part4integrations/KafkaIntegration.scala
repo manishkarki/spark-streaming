@@ -1,5 +1,6 @@
 package part4integrations
 
+import common.carsSchema
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.{col, expr}
 
@@ -28,8 +29,24 @@ object KafkaIntegration {
       .awaitTermination()
   }
 
+  def writeToKafka() = {
+    val carsDF = spark.readStream
+      .schema(carsSchema)
+      .json("src/main/resources/data/cars")
+
+    val carsKafkaDF = carsDF.selectExpr("upper(Name) as key", "name as value")
+
+    carsKafkaDF.writeStream
+      .format("kafka")
+      .option("kafka.bootstrap.servers", "localhost:9092")
+      .option("topic", "sparkstreaming")
+      .option("checkpointLocation", "checkpoints")
+      .start()
+      .awaitTermination()
+  }
+
   def main(args: Array[String]): Unit = {
-    readFromKafka()
+    writeToKafka()
   }
 
 }
