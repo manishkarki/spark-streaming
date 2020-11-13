@@ -46,8 +46,11 @@ object DStreamsTransformation {
 
   def highIncomePeoples() = readPeople().filter(_.salary > 80000)
 
+  // count
+  def countPeople() = readPeople().count() // the number of entries in every batch
+
   def main(args: Array[String]): Unit = {
-    val stream = highIncomePeoples()
+    val stream = countPeople()
     stream.print()
     ssc.start()
     ssc.awaitTermination()
