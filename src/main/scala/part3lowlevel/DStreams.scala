@@ -44,8 +44,8 @@ object DStreams {
       socketStream.flatMap(line => line.split(" "))
 
     // action
-    wordsStream.print()
-
+    //    wordsStream.print()
+    wordsStream.saveAsTextFiles("src/main/resources/data/words")
     ssc.start()
     ssc.awaitTermination()
   }
@@ -118,8 +118,8 @@ object DStreams {
   }
 
   def main(args: Array[String]): Unit = {
-//    readFromSocket()
-    readFromFile()
+        readFromSocket()
+//    readFromFile()
   }
 
 }
