@@ -2,7 +2,7 @@ package part4integrations
 
 import common.carsSchema
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.functions.{col, expr}
+import org.apache.spark.sql.functions.{col, expr, struct, to_json}
 
 /**
   * @author mkarki
@@ -50,11 +50,22 @@ object KafkaIntegration {
       USE struct columns and the to_json function.
    */
   def writeWholeCarsDSToKafka() = {
+    val carsJsonKafkaDF = carsDF.select(
+      col("Name").as("key"),
+      to_json(struct(col("Name"), col("Horsepower"), col("Origin"))).cast("String").as("value")
+    )
 
+    carsJsonKafkaDF.writeStream
+      .format("kafka")
+      .option("kafka.bootstrap.servers", "localhost:9092")
+      .option("topic", "sparkstreaming")
+      .option("checkpointLocation", "checkpoints")
+      .start()
+      .awaitTermination()
   }
 
   def main(args: Array[String]): Unit = {
-    writeToKafka()
+    writeWholeCarsDSToKafka()
   }
 
 }
