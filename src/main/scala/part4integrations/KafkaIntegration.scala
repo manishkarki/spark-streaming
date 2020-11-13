@@ -27,7 +27,7 @@ object KafkaIntegration {
   }
 
   def main(args: Array[String]): Unit = {
-
+    readFromKafka()
   }
 
 }
