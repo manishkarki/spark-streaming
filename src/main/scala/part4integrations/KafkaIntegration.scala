@@ -18,6 +18,12 @@ object KafkaIntegration {
       .option("kafka.bootstrap.servers", "localhost:9092")
       .option("subscribe", "sparkstreaming")
       .load()
+
+    kafkaDF.writeStream
+      .format("console")
+      .outputMode("append")
+      .start()
+      .awaitTermination()
   }
 
   def main(args: Array[String]): Unit = {
