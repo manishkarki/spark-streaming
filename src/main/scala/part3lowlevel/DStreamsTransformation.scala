@@ -1,5 +1,6 @@
 package part3lowlevel
 
+import java.io.File
 import java.sql.Date
 import java.time.{LocalDate, Period}
 
@@ -40,7 +41,7 @@ object DStreamsTransformation {
     (s"${person.firstName} ${person.lastName}", age)
   })
 
-  def peopleSmallNames() = readPeople().flatMap( person => {
+  def peopleSmallNames() = readPeople().flatMap(person => {
     List(person.firstName, person.lastName)
   })
 
@@ -48,6 +49,32 @@ object DStreamsTransformation {
 
   // count
   def countPeople() = readPeople().count() // the number of entries in every batch
+
+  // count by value
+  def countNames() = readPeople().map(_.firstName).countByValue()
+
+  /*
+    reduce by key
+      - works on dStream of tuples
+      - works per Batch
+  */
+  def countNamesReduce() = readPeople()
+    .map(_.firstName)
+    .map(name => (name, 1))
+    .reduceByKey((a, b) => a + b)
+
+  import spark.implicits._ // for encoders to create DS
+  def saveToJson() = readPeople().foreachRDD(
+    rdd => {
+      val ds = spark.createDataset(rdd)
+      val f = new File("src/main/resources/data/people")
+      val nFiles = f.listFiles().length
+      val path = s"src/main/resources/data/people$nFiles.json"
+
+      ds.write
+        .json(path)
+    }
+  )
 
   def main(args: Array[String]): Unit = {
     val stream = countPeople()
